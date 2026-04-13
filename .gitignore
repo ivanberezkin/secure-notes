@@ -1,12 +1,11 @@
 HELP.md
 target/
-.mvn/wrapper/maven-wrapper.jar
+backend/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
 ### Configuration files ###
 backend/src/main/resources/application.properties
-application.yml
 
 ### Docker ###
 docker-compose.yml
