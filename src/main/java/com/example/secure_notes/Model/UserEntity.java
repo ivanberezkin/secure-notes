@@ -23,7 +23,8 @@ public class UserEntity {
 
     private String username;
     private String password;
-    private String role;
+
+    private String role = "user";
 
     @OneToMany(mappedBy = "user")
     private List<NoteEntity> notes;
