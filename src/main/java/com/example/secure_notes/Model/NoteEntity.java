@@ -20,7 +20,7 @@ public class NoteEntity {
 
     private Long id;
 
-    private String note;
+    private String noteText;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
