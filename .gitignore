@@ -5,12 +5,17 @@ target/
 !**/src/test/**/target/
 
 ### Configuration files ###
-application.properties
+backend/src/main/resources/application.properties
 application.yml
 
 ### Docker ###
 docker-compose.yml
 docker-compose.override.yml
+
+
+### FrontEnd ###
+frontend/node_modules/
+frontend/.env
 
 # Database data
 postgres_data/
