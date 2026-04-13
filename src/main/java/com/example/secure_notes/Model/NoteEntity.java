@@ -7,25 +7,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
-@Table(name = "users")
+@Table(name = "notes")
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
-public class UserEntity {
+public class NoteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
 
-    private String username;
-    private String password;
-    private String role;
+    private String note;
 
-    @OneToMany(mappedBy = "user")
-    private List<NoteEntity> notes;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
 }
