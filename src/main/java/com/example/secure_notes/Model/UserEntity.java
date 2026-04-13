@@ -23,11 +23,15 @@ public class UserEntity {
     @EqualsAndHashCode.Include
     private Long id;
 
+    @Column(nullable = false, unique = true, length = 50)
     private String username;
+
+    @Column(nullable = false, length = 100)
     private String password;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
+    @Column(nullable = false, length = 20)
     private Roles role = Roles.USER;
 
     @OneToMany(mappedBy = "user")
