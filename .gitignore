@@ -5,8 +5,7 @@ target/
 !**/src/test/**/target/
 
 ### Configuration files ###
-application.properties
-application.yml
+backend/src/main/resources/application.properties
 
 ### Docker ###
 docker-compose.yml
