@@ -2,6 +2,7 @@ package com.example.secure_notes.Model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Entity
@@ -20,10 +21,12 @@ public class NoteEntity {
     @EqualsAndHashCode.Include
     private Long id;
 
+    @Size(max = 10000)
+    @Column(columnDefinition = "TEXT")
     private String noteText;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
 }
