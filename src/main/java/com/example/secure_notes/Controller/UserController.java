@@ -3,6 +3,7 @@ package com.example.secure_notes.Controller;
 import com.example.secure_notes.DTO.UserRequestDto;
 import com.example.secure_notes.DTO.UserResponseDto;
 import com.example.secure_notes.Service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserResponseDto> createNewUser(@RequestBody UserRequestDto newUser){
+    public ResponseEntity<UserResponseDto> createNewUser(@Valid @RequestBody UserRequestDto newUser){
         UserResponseDto createdUser = userService.createNewUser(newUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
