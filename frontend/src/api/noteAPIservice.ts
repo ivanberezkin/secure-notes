@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { Note } from "../types/note";
 
-const API_BASE_URL = "http://localhost:8080/api/notes";
+const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/api/notes`;
 
 export const getNotes = async () => {
   try {
