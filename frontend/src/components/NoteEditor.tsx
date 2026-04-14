@@ -36,30 +36,62 @@ const NoteEditor: React.FC = () => {
 
         {/* Toolbar */}
         <div className="flex items-center gap-1 mb-8 border-b border-gray-100 pb-4 text-gray-600">
-          <button className="p-2 hover:bg-gray-100 rounded transition-colors">
+          <button
+            type="button"
+            aria-label="Bold"
+            className="p-2 hover:bg-gray-100 rounded transition-colors"
+          >
             <Bold size={20} />
           </button>
-          <button className="p-2 hover:bg-gray-100 rounded transition-colors">
+          <button
+            type="button"
+            aria-label="Italic"
+            className="p-2 hover:bg-gray-100 rounded transition-colors"
+          >
             <Italic size={20} />
           </button>
-          <button className="p-2 hover:bg-gray-100 rounded transition-colors underline">
+          <button
+            type="button"
+            aria-label="Underline"
+            className="p-2 hover:bg-gray-100 rounded transition-colors underline"
+          >
             <Underline size={20} />
           </button>
           <div className="w-px h-6 bg-gray-200 mx-2" />
-          <button className="p-2 hover:bg-gray-100 rounded transition-colors">
+          <button
+            type="button"
+            aria-label="List"
+            className="p-2 hover:bg-gray-100 rounded transition-colors"
+          >
             <List size={20} />
           </button>
-          <button className="p-2 hover:bg-gray-100 rounded transition-colors">
+          <button
+            type="button"
+            aria-label="Ordered List"
+            className="p-2 hover:bg-gray-100 rounded transition-colors"
+          >
             <ListOrdered size={20} />
           </button>
           <div className="w-px h-6 bg-gray-200 mx-2" />
-          <button className="p-2 hover:bg-gray-100 rounded transition-colors">
+          <button
+            type="button"
+            aria-label="Attach File"
+            className="p-2 hover:bg-gray-100 rounded transition-colors"
+          >
             <Paperclip size={20} />
           </button>
-          <button className="p-2 hover:bg-gray-100 rounded transition-colors">
+          <button
+            type="button"
+            aria-label="Insert Link"
+            className="p-2 hover:bg-gray-100 rounded transition-colors"
+          >
             <Link size={20} />
           </button>
-          <button className="p-2 hover:bg-gray-100 rounded transition-colors text-red-400 hover:text-red-600 ml-auto">
+          <button
+            type="button"
+            aria-label="Delete Note"
+            className="p-2 hover:bg-gray-100 rounded transition-colors text-red-400 hover:text-red-600 ml-auto"
+          >
             <Trash2 size={20} />
           </button>
         </div>

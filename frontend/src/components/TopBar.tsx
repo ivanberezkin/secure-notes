@@ -9,11 +9,15 @@ export const TopBar: React.FC = () => {
       <div className="flex items-center gap-6">
         {/* Search Bar */}
         <div className="relative">
+          <label htmlFor="topbar-search" className="sr-only">
+            Search notes
+          </label>
           <Search
             className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
             size={18}
           />
           <input
+            id="topbar-search"
             type="text"
             placeholder="Search all notes..."
             className="pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
@@ -26,8 +30,20 @@ export const TopBar: React.FC = () => {
         </button>
 
         <div className="flex items-center gap-3 text-gray-400 border-l pl-6 border-gray-200">
-          <Bell size={20} className="cursor-pointer hover:text-gray-600" />
-          <Settings size={20} className="cursor-pointer hover:text-gray-600" />
+          <button
+            type="button"
+            aria-label="Notifications"
+            className="p-1 rounded hover:text-gray-600 hover:bg-gray-100"
+          >
+            <Bell size={20} />
+          </button>
+          <button
+            type="button"
+            aria-label="Settings"
+            className="p-1 rounded hover:text-gray-600 hover:bg-gray-100"
+          >
+            <Settings size={20} />
+          </button>
         </div>
       </div>
     </header>
