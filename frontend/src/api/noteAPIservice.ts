@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { Note } from "../types/note";
 
 const API_BASE_URL = "http://localhost:8080/api/notes";
 
@@ -12,7 +13,7 @@ export const getNotes = async () => {
   }
 };
 
-export const getNoteById = async (noteId: string) => {
+export const getNoteById = async (noteId: number) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/${noteId}`);
     return response.data;
@@ -22,10 +23,7 @@ export const getNoteById = async (noteId: string) => {
   }
 };
 
-export const createNote = async (noteToCreate: {
-  title: string;
-  content: string;
-}) => {
+export const createNote = async (noteToCreate: Note) => {
   try {
     const response = await axios.post(API_BASE_URL, noteToCreate);
     return response.data;
@@ -35,7 +33,7 @@ export const createNote = async (noteToCreate: {
   }
 };
 
-export const deleteNote = async (noteId: string) => {
+export const deleteNote = async (noteId: number) => {
   try {
     const response = await axios.delete(`${API_BASE_URL}/${noteId}`);
     return response.data;
