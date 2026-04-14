@@ -40,7 +40,7 @@ const NotesList: React.FC = () => {
   const [selectedId, setSelectedId] = useState("1");
 
   return (
-    <div className="w-80 h-full border-r border-gray-200 bg-gray-50 flex flex-col">
+    <div className="w-120 h-full border-r border-gray-200 bg-gray-50 flex flex-col">
       {/* Header */}
       <div className="p-4 flex items-center justify-between border-b border-gray-200 bg-white">
         <h2 className="font-bold text-gray-800">Notes List</h2>
