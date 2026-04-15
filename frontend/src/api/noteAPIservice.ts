@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Note } from "../types/note";
+import type { NoteCreateRequest } from "../types/note";
 
 const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/api/notes`;
 
@@ -23,7 +23,7 @@ export const getNoteById = async (noteId: number) => {
   }
 };
 
-export const createNote = async (noteToCreate: Note) => {
+export const createNote = async (noteToCreate: NoteCreateRequest) => {
   try {
     const response = await axios.post(API_BASE_URL, noteToCreate);
     return response.data;
