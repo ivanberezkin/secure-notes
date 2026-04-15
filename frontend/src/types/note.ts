@@ -7,3 +7,9 @@ export interface Note {
   updatedAt: string;
   favorite: boolean;
 }
+
+export interface NoteCreateRequest {
+  title: string;
+  content: string;
+  tags: string[];
+}

@@ -4,6 +4,12 @@ package com.example.secure_notes.Model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "notes")
@@ -23,10 +29,21 @@ public class NoteEntity {
 
     @Size(max = 10000)
     @Column(columnDefinition = "TEXT")
-    private String noteText;
+    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
+    @OneToMany(mappedBy = "note", cascade = CascadeType.ALL)
+    private List<TagsEntity> tags = new ArrayList<>();
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    @Column(columnDefinition = "boolean default false")
+    private Boolean favorite = false;
 }
