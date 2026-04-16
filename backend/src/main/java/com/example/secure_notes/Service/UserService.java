@@ -6,4 +6,6 @@ import com.example.secure_notes.DTO.UserResponseDto;
 public interface UserService {
 
     UserResponseDto createNewUser(UserRequestDto newUser);
+
+    String verify(UserRequestDto user);
 }
