@@ -19,27 +19,6 @@ public class UserServiceImpl implements UserService {
         return convertToDto(createdUser);
     }
 
-    @Override
-    public boolean registerNewUser(String username, String password) {
-        if(username == null || username.isBlank()){
-            return false;
-        }
-        if(password == null || password.isBlank()){
-            return false;
-        }
-        if(userRepository.existByUsername(username)){
-            return false;
-        }
-
-        UserEntity newUser = new UserEntity();
-        newUser.setUsername(username);
-        newUser.setPassword(password);
-        newUser.setRole(Roles.USER);
-
-        userRepository.save(newUser);
-        return true;
-    }
-
 
     private UserEntity convertToEntity(UserRequestDto dto){
         return UserEntity.builder()

@@ -7,5 +7,4 @@ public interface UserService {
 
     UserResponseDto createNewUser(UserRequestDto newUser);
 
-    boolean registerNewUser(String username, String password);
 }

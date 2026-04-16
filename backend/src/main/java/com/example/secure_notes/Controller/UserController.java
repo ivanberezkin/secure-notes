@@ -18,11 +18,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
-    public ResponseEntity<UserResponseDto> createNewUser(@Valid @RequestBody UserRequestDto newUser){
-        //Todo lägg till check att saker inte är tomma.
-        UserResponseDto createdUser = userService.createNewUser(newUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
-    }
+//    @PostMapping
+
 
 }
