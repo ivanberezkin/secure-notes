@@ -2,6 +2,7 @@ package com.example.secure_notes.Service;
 
 import com.example.secure_notes.DTO.UserRequestDto;
 import com.example.secure_notes.DTO.UserResponseDto;
+import com.example.secure_notes.Exceptions.UserAlreadyExistsException;
 import com.example.secure_notes.Model.UserEntity;
 import com.example.secure_notes.Repositories.UserRepository;
 import com.example.secure_notes.Utils.Roles;
@@ -22,6 +23,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto createNewUser(UserRequestDto newUserDto) {
+        if (userRepository.existsByUsername(newUserDto.getUsername())) {
+            throw new UserAlreadyExistsException("Username " + newUserDto.getUsername() + "already exists.");
+        }
 
         newUserDto.setPassword(passwordEncoder.encode(newUserDto.getPassword()));
         UserEntity createdUser = userRepository.save(convertToEntity(newUserDto));
@@ -32,21 +36,19 @@ public class UserServiceImpl implements UserService {
     public String verify(UserRequestDto user) {
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+        return jwtService.generateToken(user.getUsername());
 
-        if(authentication.isAuthenticated()){
-            return jwtService.generateToken(user.getUsername());
-        }
-        return "fail";
     }
 
 
-    private UserEntity convertToEntity(UserRequestDto dto){
+    private UserEntity convertToEntity(UserRequestDto dto) {
         return UserEntity.builder()
                 .username(dto.getUsername())
                 .password(dto.getPassword())
                 .build();
     }
-    private UserResponseDto convertToDto(UserEntity user){
+
+    private UserResponseDto convertToDto(UserEntity user) {
         return UserResponseDto.builder()
                 .username(user.getUsername())
                 .build();

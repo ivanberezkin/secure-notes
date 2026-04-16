@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+
 @RequiredArgsConstructor
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -29,19 +30,28 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = null;
         String username = null;
 
-        if(authHeader != null && authHeader.startsWith("Bearer")){
+        if (authHeader != null && authHeader.startsWith("Bearer")) {
             token = authHeader.substring(7);
-            username = jwtService.extractUsername(token);
-        }
-
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails = myUserDetailService.loadUserByUsername(username);
-            if(jwtService.validateToken(token, userDetails)){
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+            try {
+                username = jwtService.extractUsername(token);
+            } catch (io.jsonwebtoken.JwtException e) {
+                filterChain.doFilter(request, response);
+                return;
             }
         }
-        filterChain.doFilter(request,response);
+        try {
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = myUserDetailService.loadUserByUsername(username);
+                if (jwtService.validateToken(token, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            }
+        } catch (io.jsonwebtoken.JwtException e) {
+            // Token validation failde
+        }
+
+        filterChain.doFilter(request, response);
     }
 }
