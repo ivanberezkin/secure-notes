@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
+    private final JWTService jwtService;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 
     @Override
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
         if(authentication.isAuthenticated()){
-            return "Success";
+            return jwtService.generateToken(user.getUsername());
         }
         return "fail";
     }
