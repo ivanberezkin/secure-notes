@@ -1,5 +1,7 @@
 package com.example.secure_notes.config;
 
+import com.example.secure_notes.Repositories.UserRepository;
+import com.example.secure_notes.Service.MyUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,6 +20,10 @@ import org.springframework.security.web.SecurityFilterChain;
 //@EnableWebSecurity
 public class SecurityConfig {
 
+    @Bean
+    public UserDetailsService userDetailsService(UserRepository userRepository){
+        return new MyUserDetailService(userRepository);
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -29,16 +35,13 @@ public class SecurityConfig {
                 .build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return NoOpPasswordEncoder.getInstance();
-    }
 
-//    @Bean
-//    public AuthenticationProvider authenticationProvider(){
-//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-//        return provider;
-//    }
+    @Bean
+    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService){
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        return provider;
+    }
 
 
 }
