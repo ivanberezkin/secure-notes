@@ -6,6 +6,9 @@ import com.example.secure_notes.Model.UserEntity;
 import com.example.secure_notes.Repositories.UserRepository;
 import com.example.secure_notes.Utils.Roles;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-
+    private final AuthenticationManager authenticationManager;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 
     @Override
@@ -22,6 +25,17 @@ public class UserServiceImpl implements UserService {
         newUserDto.setPassword(passwordEncoder.encode(newUserDto.getPassword()));
         UserEntity createdUser = userRepository.save(convertToEntity(newUserDto));
         return convertToDto(createdUser);
+    }
+
+    @Override
+    public String verify(UserRequestDto user) {
+        Authentication authentication =
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+
+        if(authentication.isAuthenticated()){
+            return "Success";
+        }
+        return "fail";
     }
 
 

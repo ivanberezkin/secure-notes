@@ -9,11 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/register")
 public class RegisterController {
 
     private final UserRepository userRepository;
@@ -24,11 +22,16 @@ public class RegisterController {
         this.userService = userService;
     }
 
-    @PostMapping()
+    @PostMapping("/register")
     public ResponseEntity<UserResponseDto> createNewUser(@Valid @RequestBody UserRequestDto newUser){
         //Todo lägg till check att saker inte är tomma.
         UserResponseDto createdUser = userService.createNewUser(newUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    }
+
+    @PostMapping("/login")
+    public String loginUser(@RequestBody UserRequestDto user){
+        return userService.verify(user);
     }
 
 }

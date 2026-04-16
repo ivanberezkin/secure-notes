@@ -7,4 +7,5 @@ public interface UserService {
 
     UserResponseDto createNewUser(UserRequestDto newUser);
 
+    String verify(UserRequestDto user);
 }
