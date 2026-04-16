@@ -6,6 +6,7 @@ import com.example.secure_notes.Model.UserEntity;
 import com.example.secure_notes.Repositories.UserRepository;
 import com.example.secure_notes.Utils.Roles;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,8 +14,12 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+
     @Override
     public UserResponseDto createNewUser(UserRequestDto newUserDto) {
+
+        newUserDto.setPassword(passwordEncoder.encode(newUserDto.getPassword()));
         UserEntity createdUser = userRepository.save(convertToEntity(newUserDto));
         return convertToDto(createdUser);
     }
