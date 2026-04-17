@@ -45,11 +45,8 @@ public class UserServiceImpl implements UserService {
                     HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
                     SecurityContextHolder.getContext()
             );
-            return "Login Successful";
         }
-
-        return "Login failed";
-
+        return "Login Successful";
     }
 
 

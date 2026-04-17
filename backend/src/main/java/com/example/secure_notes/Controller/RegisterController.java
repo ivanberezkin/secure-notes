@@ -36,6 +36,9 @@ public class RegisterController {
         return userService.verify(user, request);
     }
 
+    // TODO: Switch to Spring's built-in logout for proper cookie deletion
+    // See: SecurityConfig - use .logout() with .deleteCookies("JSESSIONID")
+    // Current implementation works but doesn't set HttpOnly/Secure/SameSite on deletion cookie
     @PostMapping ("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response){
         HttpSession session = request.getSession(false);
