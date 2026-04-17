@@ -2,11 +2,15 @@ package com.example.secure_notes.Controller;
 
 import com.example.secure_notes.DTO.UserRequestDto;
 import com.example.secure_notes.DTO.UserResponseDto;
-import com.example.secure_notes.Repositories.UserRepository;
 import com.example.secure_notes.Service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,11 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RegisterController {
 
-    private final UserRepository userRepository;
     private final UserService userService;
 
-    public RegisterController(UserRepository userRepository, UserService userService) {
-        this.userRepository = userRepository;
+    public RegisterController( UserService userService) {
         this.userService = userService;
     }
 
@@ -30,8 +32,28 @@ public class RegisterController {
     }
 
     @PostMapping("/login")
-    public String loginUser(@RequestBody UserRequestDto user){
-        return userService.verify(user);
+    public String loginUser(@RequestBody UserRequestDto user, HttpServletRequest request){
+        return userService.verify(user, request);
     }
+
+    // TODO: Switch to Spring's built-in logout for proper cookie deletion
+    // See: SecurityConfig - use .logout() with .deleteCookies("JSESSIONID")
+    // Current implementation works but doesn't set HttpOnly/Secure/SameSite on deletion cookie
+    @PostMapping ("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response){
+        HttpSession session = request.getSession(false);
+        if(session != null){
+            session.invalidate();
+        }
+        SecurityContextHolder.clearContext();
+
+        Cookie cookie = new Cookie("JSESSIONID", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok("Logged out Successfully");
+    }
+
 
 }
