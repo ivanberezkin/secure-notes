@@ -5,12 +5,15 @@ import com.example.secure_notes.DTO.UserResponseDto;
 import com.example.secure_notes.Exceptions.UserAlreadyExistsException;
 import com.example.secure_notes.Model.UserEntity;
 import com.example.secure_notes.Repositories.UserRepository;
-import com.example.secure_notes.Utils.Roles;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,8 +21,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
-    private final JWTService jwtService;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public UserResponseDto createNewUser(UserRequestDto newUserDto) {
@@ -33,10 +35,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String verify(UserRequestDto user) {
+    public String verify(UserRequestDto user, HttpServletRequest request) {
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-        return jwtService.generateToken(user.getUsername());
+        if(authentication.isAuthenticated()){
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            HttpSession session = request.getSession(true);
+            session.setAttribute(
+                    HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                    SecurityContextHolder.getContext()
+            );
+            return "Login Successful";
+        }
+
+        return "Login failed";
 
     }
 

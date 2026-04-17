@@ -4,6 +4,7 @@ import com.example.secure_notes.DTO.UserRequestDto;
 import com.example.secure_notes.DTO.UserResponseDto;
 import com.example.secure_notes.Repositories.UserRepository;
 import com.example.secure_notes.Service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RegisterController {
 
-    private final UserRepository userRepository;
     private final UserService userService;
 
-    public RegisterController(UserRepository userRepository, UserService userService) {
-        this.userRepository = userRepository;
+    public RegisterController( UserService userService) {
         this.userService = userService;
     }
 
@@ -30,8 +29,8 @@ public class RegisterController {
     }
 
     @PostMapping("/login")
-    public String loginUser(@RequestBody UserRequestDto user){
-        return userService.verify(user);
+    public String loginUser(@RequestBody UserRequestDto user, HttpServletRequest request){
+        return userService.verify(user, request);
     }
 
 }
