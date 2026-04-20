@@ -34,6 +34,15 @@ public class NoteServiceImpl implements NoteService{
                 .toList();
     }
 
+    @Override
+    public List<NoteResponseDto> getAllUsersNotes() {
+        UserEntity user = getContextUser();
+        return noteRepository.findByUser(user)
+                .stream()
+                .map(this::convertToResponseDto)
+                .toList();
+    }
+
 
     private NoteEntity convertToEntity(NoteRequestDto dto){
         return NoteEntity.builder()

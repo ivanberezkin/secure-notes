@@ -10,4 +10,6 @@ public interface NoteService {
     NoteResponseDto createNewNote(NoteRequestDto noteRequestDto);
 
     List<NoteResponseDto> getAllNotes();
+
+    List<NoteResponseDto> getAllUsersNotes();
 }

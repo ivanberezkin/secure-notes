@@ -23,19 +23,24 @@ public class NoteController {
         this.noteService = noteService;
     }
 
-    @PostMapping("/notes")
+    @PostMapping("/api/notes")
     public ResponseEntity<NoteResponseDto> createNewNote(@Valid @RequestBody NoteRequestDto noteRequestDto){
         NoteResponseDto createdNote = noteService.createNewNote(noteRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdNote);
     }
 
-    @GetMapping("/allnotes")
+    @GetMapping("/api/allnotes")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<NoteResponseDto>> getAllNotes(){
         List<NoteResponseDto> allNotes = noteService.getAllNotes();
         return ResponseEntity.ok(allNotes);
     }
 
+    @GetMapping("/api/notes/my")
+    public ResponseEntity<List<NoteResponseDto>> getAllUsersNotes(){
+        List<NoteResponseDto> allUsersNotes = noteService.getAllUsersNotes();
+        return ResponseEntity.ok(allUsersNotes);
+    }
 
 
 }
