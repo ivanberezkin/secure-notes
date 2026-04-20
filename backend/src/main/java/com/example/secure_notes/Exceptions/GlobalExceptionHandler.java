@@ -2,6 +2,7 @@ package com.example.secure_notes.Exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -21,6 +22,26 @@ public class GlobalExceptionHandler {
         body.put("status", HttpStatus.CONFLICT.value());
 
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Map<String, Object>> handeAccessDenied(AccessDeniedException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", ex.getMessage());
+        body.put("status", HttpStatus.FORBIDDEN.value());
+
+        return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(NoteNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handeNoteNotFound(NoteNotFoundException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", ex.getMessage());
+        body.put("status", HttpStatus.NOT_FOUND.value());
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(AuthenticationException.class)

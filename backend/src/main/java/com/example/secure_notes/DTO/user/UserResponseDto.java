@@ -1,4 +1,4 @@
-package com.example.secure_notes.DTO;
+package com.example.secure_notes.DTO.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
