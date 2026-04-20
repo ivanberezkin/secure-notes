@@ -7,14 +7,12 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/notes")
 public class NoteController {
 
     private NoteService noteService;
@@ -23,23 +21,29 @@ public class NoteController {
         this.noteService = noteService;
     }
 
-    @PostMapping("/api/notes")
+    @PostMapping()
     public ResponseEntity<NoteResponseDto> createNewNote(@Valid @RequestBody NoteRequestDto noteRequestDto){
         NoteResponseDto createdNote = noteService.createNewNote(noteRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdNote);
     }
 
-    @GetMapping("/api/allnotes")
+    @GetMapping("/allnotes")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<NoteResponseDto>> getAllNotes(){
         List<NoteResponseDto> allNotes = noteService.getAllNotes();
         return ResponseEntity.ok(allNotes);
     }
 
-    @GetMapping("/api/notes/my")
+    @GetMapping("/my")
     public ResponseEntity<List<NoteResponseDto>> getAllUsersNotes(){
         List<NoteResponseDto> allUsersNotes = noteService.getAllUsersNotes();
         return ResponseEntity.ok(allUsersNotes);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<NoteResponseDto> getUserNoteById(@PathVariable Long id){
+        NoteResponseDto detailedNote = noteService.getNoteById(id);
+        return ResponseEntity.ok(detailedNote);
     }
 
 

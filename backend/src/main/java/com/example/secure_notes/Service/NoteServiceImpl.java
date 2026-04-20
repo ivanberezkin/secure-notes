@@ -2,6 +2,8 @@ package com.example.secure_notes.Service;
 
 import com.example.secure_notes.DTO.note.NoteRequestDto;
 import com.example.secure_notes.DTO.note.NoteResponseDto;
+import com.example.secure_notes.Exceptions.AccessDeniedException;
+import com.example.secure_notes.Exceptions.NoteNotFoundException;
 import com.example.secure_notes.Model.NoteEntity;
 //import com.example.secure_notes.Model.TagsEntity;
 import com.example.secure_notes.Model.UserEntity;
@@ -11,8 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.NotAcceptableStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -41,6 +45,18 @@ public class NoteServiceImpl implements NoteService{
                 .stream()
                 .map(this::convertToResponseDto)
                 .toList();
+    }
+
+    @Override
+    public NoteResponseDto getNoteById(Long id) {
+        NoteEntity detailedNote = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("Noteservice: Note Id not found: " + id));
+
+        UserEntity authenticatedUser = getContextUser();
+        if(!detailedNote.getUser().getId().equals(authenticatedUser.getId())){
+            throw new AccessDeniedException("Noteservice: Access denied for user: " + authenticatedUser.getUsername());
+        }
+
+        return convertToResponseDto(detailedNote);
     }
 
 
