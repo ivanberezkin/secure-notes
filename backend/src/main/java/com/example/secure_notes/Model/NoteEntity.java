@@ -38,8 +38,6 @@ public class NoteEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @OneToMany(mappedBy = "note", cascade = CascadeType.ALL)
-    private List<TagsEntity> tags = new ArrayList<>();
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -47,6 +45,7 @@ public class NoteEntity {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @Builder.Default
     @Column(columnDefinition = "boolean default false")
     private Boolean favorite = false;
 }

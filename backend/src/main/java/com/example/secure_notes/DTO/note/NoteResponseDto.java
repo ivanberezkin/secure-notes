@@ -1,7 +1,7 @@
 package com.example.secure_notes.DTO.note;
 
 
-import com.example.secure_notes.Model.TagsEntity;
+//import com.example.secure_notes.Model.TagsEntity;
 import com.example.secure_notes.Model.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -33,7 +33,7 @@ public class NoteResponseDto {
 
     private String username;
 
-    private List<String> tags = new ArrayList<>();
+//    private List<String> tags = new ArrayList<>();
 
     private LocalDateTime createdAt;
 

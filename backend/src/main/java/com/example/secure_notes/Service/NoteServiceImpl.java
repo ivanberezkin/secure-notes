@@ -2,42 +2,58 @@ package com.example.secure_notes.Service;
 
 import com.example.secure_notes.DTO.note.NoteRequestDto;
 import com.example.secure_notes.DTO.note.NoteResponseDto;
-import com.example.secure_notes.DTO.user.UserResponseDto;
 import com.example.secure_notes.Model.NoteEntity;
-import com.example.secure_notes.Model.TagsEntity;
+//import com.example.secure_notes.Model.TagsEntity;
+import com.example.secure_notes.Model.UserEntity;
 import com.example.secure_notes.Repositories.NoteRepository;
+import com.example.secure_notes.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import static org.hibernate.Hibernate.map;
 
 @Service
 @RequiredArgsConstructor
 public class NoteServiceImpl implements NoteService{
     private final NoteRepository noteRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public NoteResponseDto createNewNote(NoteRequestDto noteRequestDto) {
-        return null;
+    public NoteResponseDto createNewNote(NoteRequestDto newNoteDto) {
+        NoteEntity createdNote = noteRepository.save(convertToEntity(newNoteDto));
+        return convertToResponseDto(createdNote);
     }
+
+
     private NoteEntity convertToEntity(NoteRequestDto dto){
         return NoteEntity.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
-                .tags(dto.getTags())
+                .user(getContextUser())
                 .build();
     }
-    private NoteResponseDto convertToDto (NoteEntity note){
+    private NoteResponseDto convertToResponseDto (NoteEntity note){
         return NoteResponseDto.builder()
                 .id(note.getId())
                 .title(note.getTitle())
                 .content(note.getContent())
                 .username(note.getUser().getUsername())
-                .tags(note.getTags().stream().map(TagsEntity::getTagName).toList())
                 .createdAt(note.getCreatedAt())
                 .updatedAt(note.getUpdatedAt())
                 .favorite(note.getFavorite())
                 .build();
+    }
+
+    public UserEntity getContextUser(){
+        String username = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("NoteService: User not found " + username ));
+
     }
 
 
