@@ -1,4 +1,4 @@
-package com.example.secure_notes.DTO;
+package com.example.secure_notes.DTO.user;
 
 
 import jakarta.validation.constraints.NotBlank;

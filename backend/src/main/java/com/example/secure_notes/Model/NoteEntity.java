@@ -2,6 +2,7 @@ package com.example.secure_notes.Model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -26,6 +27,10 @@ public class NoteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
+
+    @NotNull
+    @Size(max = 150)
+    private String title;
 
     @Size(max = 10000)
     @Column(columnDefinition = "TEXT")

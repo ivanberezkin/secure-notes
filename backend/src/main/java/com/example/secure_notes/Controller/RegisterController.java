@@ -1,7 +1,7 @@
 package com.example.secure_notes.Controller;
 
-import com.example.secure_notes.DTO.UserRequestDto;
-import com.example.secure_notes.DTO.UserResponseDto;
+import com.example.secure_notes.DTO.user.UserRequestDto;
+import com.example.secure_notes.DTO.user.UserResponseDto;
 import com.example.secure_notes.Service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
