@@ -71,6 +71,15 @@ public class NoteServiceImpl implements NoteService{
         noteRepository.delete(noteToDelete);
     }
 
+    @Override
+    public NoteResponseDto updateNote(Long id, NoteRequestDto updatedNote) {
+        NoteEntity noteInDb = getNoteById(id);
+        noteInDb.setTitle(updatedNote.getTitle());
+        noteInDb.setContent(updatedNote.getContent());
+        noteInDb.setFavorite(updatedNote.isFavorite());
+        return convertToResponseDto(noteRepository.save(noteInDb));
+    }
+
 
     private NoteEntity convertToEntity(NoteRequestDto dto){
         return NoteEntity.builder()

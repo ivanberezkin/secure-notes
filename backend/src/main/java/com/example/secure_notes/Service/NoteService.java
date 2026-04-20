@@ -20,4 +20,6 @@ public interface NoteService {
     NoteResponseDto getDetailedNoteForUser(Long id);
 
     void deleteNoteById(Long id);
+
+    NoteResponseDto updateNote(Long id, NoteRequestDto updatedNote);
 }

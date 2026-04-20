@@ -15,4 +15,5 @@ public class NoteRequestDto {
     @Size(max = 10000)
     private String content;
 
+    private boolean favorite;
 }
