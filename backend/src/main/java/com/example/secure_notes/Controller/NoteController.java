@@ -42,7 +42,7 @@ public class NoteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<NoteResponseDto> getUserNoteById(@PathVariable Long id){
-        NoteResponseDto detailedNote = noteService.getNoteById(id);
+        NoteResponseDto detailedNote = noteService.getDetailedNoteForUser(id);
         return ResponseEntity.ok(detailedNote);
     }
 

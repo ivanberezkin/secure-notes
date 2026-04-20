@@ -2,6 +2,7 @@ package com.example.secure_notes.Service;
 
 import com.example.secure_notes.DTO.note.NoteRequestDto;
 import com.example.secure_notes.DTO.note.NoteResponseDto;
+import com.example.secure_notes.Model.NoteEntity;
 
 import java.util.List;
 
@@ -13,5 +14,7 @@ public interface NoteService {
 
     List<NoteResponseDto> getAllUsersNotes();
 
-    NoteResponseDto getNoteById(Long id);
+    NoteEntity getNoteById(Long id);
+
+    NoteResponseDto getDetailedNoteForUser(Long id);
 }

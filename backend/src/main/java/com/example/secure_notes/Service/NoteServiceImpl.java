@@ -48,7 +48,7 @@ public class NoteServiceImpl implements NoteService{
     }
 
     @Override
-    public NoteResponseDto getNoteById(Long id) {
+    public NoteEntity getNoteById(Long id) {
         NoteEntity detailedNote = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("Noteservice: Note Id not found: " + id));
 
         UserEntity authenticatedUser = getContextUser();
@@ -56,7 +56,12 @@ public class NoteServiceImpl implements NoteService{
             throw new AccessDeniedException("Noteservice: Access denied for user: " + authenticatedUser.getUsername());
         }
 
-        return convertToResponseDto(detailedNote);
+        return detailedNote;
+    }
+
+    @Override
+    public NoteResponseDto getDetailedNoteForUser(Long id) {
+        return convertToResponseDto(getNoteById(id));
     }
 
 
