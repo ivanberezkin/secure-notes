@@ -10,6 +10,7 @@ import com.example.secure_notes.Model.UserEntity;
 import com.example.secure_notes.Repositories.NoteRepository;
 import com.example.secure_notes.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -62,6 +63,12 @@ public class NoteServiceImpl implements NoteService{
     @Override
     public NoteResponseDto getDetailedNoteForUser(Long id) {
         return convertToResponseDto(getNoteById(id));
+    }
+
+    @Override
+    public void deleteNoteById(Long id) {
+        NoteEntity noteToDelete = getNoteById(id);
+        noteRepository.delete(noteToDelete);
     }
 
 
