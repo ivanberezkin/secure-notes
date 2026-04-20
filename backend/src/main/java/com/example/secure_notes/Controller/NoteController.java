@@ -6,9 +6,12 @@ import com.example.secure_notes.Service.NoteService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class NoteController {
@@ -23,6 +26,12 @@ public class NoteController {
     public ResponseEntity<NoteResponseDto> createNewNote(@Valid @RequestBody NoteRequestDto noteRequestDto){
         NoteResponseDto createdNote = noteService.createNewNote(noteRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdNote);
+    }
+
+    @GetMapping("/allnotes")
+    public ResponseEntity<List<NoteResponseDto>> getAllNotes(){
+        List<NoteResponseDto> allNotes = noteService.getAllNotes();
+        return ResponseEntity.ok(allNotes);
     }
 
 }

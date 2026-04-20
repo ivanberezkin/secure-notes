@@ -12,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +25,13 @@ public class NoteServiceImpl implements NoteService{
     public NoteResponseDto createNewNote(NoteRequestDto newNoteDto) {
         NoteEntity createdNote = noteRepository.save(convertToEntity(newNoteDto));
         return convertToResponseDto(createdNote);
+    }
+
+    @Override
+    public List<NoteResponseDto> getAllNotes() {
+        return noteRepository.findAll().stream()
+                .map(this::convertToResponseDto)
+                .toList();
     }
 
 
