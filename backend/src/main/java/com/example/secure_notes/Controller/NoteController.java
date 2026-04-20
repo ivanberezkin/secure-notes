@@ -55,7 +55,7 @@ public class NoteController {
     @PutMapping("/{id}")
     public ResponseEntity<NoteResponseDto> updateNote(
             @PathVariable Long id,
-            @RequestBody NoteRequestDto updatedNote){
+            @Valid @RequestBody NoteRequestDto updatedNote){
         NoteResponseDto noteAfterUpdate = noteService.updateNote(id, updatedNote);
         return ResponseEntity.ok(noteAfterUpdate);
     }

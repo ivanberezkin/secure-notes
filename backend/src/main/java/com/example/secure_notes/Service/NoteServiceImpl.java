@@ -2,22 +2,18 @@ package com.example.secure_notes.Service;
 
 import com.example.secure_notes.DTO.note.NoteRequestDto;
 import com.example.secure_notes.DTO.note.NoteResponseDto;
-import com.example.secure_notes.Exceptions.AccessDeniedException;
 import com.example.secure_notes.Exceptions.NoteNotFoundException;
 import com.example.secure_notes.Model.NoteEntity;
-//import com.example.secure_notes.Model.TagsEntity;
 import com.example.secure_notes.Model.UserEntity;
 import com.example.secure_notes.Repositories.NoteRepository;
 import com.example.secure_notes.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.NotAcceptableStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -54,7 +50,7 @@ public class NoteServiceImpl implements NoteService{
 
         UserEntity authenticatedUser = getContextUser();
         if(!detailedNote.getUser().getId().equals(authenticatedUser.getId())){
-            throw new AccessDeniedException("Noteservice: Access denied for user: " + authenticatedUser.getUsername());
+            throw new NoteNotFoundException("Noteservice: Note not found: " + id);
         }
 
         return detailedNote;
@@ -86,6 +82,7 @@ public class NoteServiceImpl implements NoteService{
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .user(getContextUser())
+                .favorite(dto.isFavorite())
                 .build();
     }
     private NoteResponseDto convertToResponseDto (NoteEntity note){
