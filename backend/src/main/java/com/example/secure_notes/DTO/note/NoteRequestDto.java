@@ -26,9 +26,6 @@ public class NoteRequestDto {
     @Size(max = 10000)
     private String content;
 
-    @NotBlank
-    private UserEntity user;
-
     private List<TagsEntity> tags = new ArrayList<>();
 
 }

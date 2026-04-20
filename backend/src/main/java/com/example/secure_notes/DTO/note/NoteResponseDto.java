@@ -19,35 +19,25 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @Getter
+@Builder
 public class NoteResponseDto {
 
-    @NotNull
-    @NotBlank
+
     private Long id;
 
-    @NotNull
-    @NotBlank
     @Size(max = 150)
+    @NotBlank
     private String title;
 
-    @Size(max = 10000)
     private String content;
 
-    @NotNull
-    @NotBlank
-    private UserEntity user;
+    private String username;
 
-    private List<TagsEntity> tags = new ArrayList<>();
+    private List<String> tags = new ArrayList<>();
 
-    @NotNull
-    @NotBlank
     private LocalDateTime createdAt;
 
-    @NotNull
-    @NotBlank
     private LocalDateTime updatedAt;
 
-    @NotNull
-    @NotBlank
     private Boolean favorite = false;
 }

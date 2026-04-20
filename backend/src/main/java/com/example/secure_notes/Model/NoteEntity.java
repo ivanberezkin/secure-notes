@@ -28,12 +28,10 @@ public class NoteEntity {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @NotNull
-    @Size(max = 150)
+    @Column(nullable = false, length = 150)
     private String title;
 
-    @Size(max = 10000)
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", length = 10000)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
