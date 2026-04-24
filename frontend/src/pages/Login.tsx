@@ -4,7 +4,7 @@ import { getCurrentUser, loginUser } from "../api/userAPIservice";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, login } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,7 +16,6 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
