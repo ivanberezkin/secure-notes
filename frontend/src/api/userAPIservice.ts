@@ -23,6 +23,16 @@ export const loginUser = async (username: string, password: string) => {
   }
 };
 
+export const logoutUser = async () => {
+  try {
+    const response = await axiosInstance.post("/logout");
+    return response.data;
+  } catch (error) {
+    console.error("Error logging out:", error);
+    throw error;
+  }
+};
+
 export const getCsrf = async () => {
   await axiosInstance.get("/csrf", {
     withCredentials: true,

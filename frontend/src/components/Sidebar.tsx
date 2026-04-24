@@ -7,7 +7,11 @@ import {
   Folder,
   Hash,
   ChevronDown,
+  LogOut,
 } from "lucide-react";
+import { logoutUser } from "../api/userAPIservice";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router";
 
 interface NavItem {
   id: string;
@@ -18,6 +22,8 @@ interface NavItem {
 
 const Sidebar: React.FC = () => {
   const [activeTab, setActiveTab] = useState("all-notes");
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const quickAccess: NavItem[] = [
     { id: "all-notes", label: "All Notes", icon: <StickyNote size={18} /> },
@@ -30,6 +36,16 @@ const Sidebar: React.FC = () => {
     { id: "personal", label: "Personal", count: 15 },
     { id: "projects", label: "Projects", count: 4 },
   ];
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      logout();
+      navigate("/login");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
 
   return (
     <aside className="w-64 h-screen bg-[#1e2327] text-gray-300 flex flex-col p-4 border-r border-gray-700">
@@ -109,6 +125,15 @@ const Sidebar: React.FC = () => {
             </span>
           ))}
         </div>
+      </div>
+      <div className="mt-auto">
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-red-400 hover:bg-gray-800 hover:text-red-300 transition-all"
+        >
+          <LogOut size={40} />
+          Logout
+        </button>
       </div>
     </aside>
   );
