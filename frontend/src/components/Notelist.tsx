@@ -5,9 +5,10 @@ import { getUserNotes } from "../api/noteAPIservice";
 
 interface Props {
   onNoteSelect: (note: Note) => void;
+  refreshTrigger: number; // Optional prop to trigger refresh when notes are updated
 }
 
-const Notelist: React.FC<Props> = ({ onNoteSelect }) => {
+const Notelist: React.FC<Props> = ({ onNoteSelect, refreshTrigger }) => {
   const [selectedNote, setSelectedNote] = useState<number | null>(null);
   const [notes, setNotes] = useState<Note[]>([]);
 
@@ -15,6 +16,7 @@ const Notelist: React.FC<Props> = ({ onNoteSelect }) => {
     const fetchNotes = async () => {
       try {
         const notes = await getUserNotes();
+        setSelectedNote(null);
         setNotes(notes);
       } catch {
         console.error("Failed to fetch notes");
@@ -22,7 +24,7 @@ const Notelist: React.FC<Props> = ({ onNoteSelect }) => {
     };
 
     fetchNotes();
-  }, []);
+  }, [refreshTrigger]);
 
   return (
     <div className="w-120 h-full border-r border-gray-200 bg-gray-50 flex flex-col">

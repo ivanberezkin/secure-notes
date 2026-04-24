@@ -1,12 +1,11 @@
 import React from "react";
 import { Search, Settings, Plus } from "lucide-react";
 
-export const TopBar: React.FC = () => {
-  const createNewNote = () => {
-    // Placeholder for creating a new note
-    alert("Create new note functionality to be implemented!");
-  };
+interface TopBarProps {
+  onNewNote: () => void;
+}
 
+export const TopBar: React.FC<TopBarProps> = ({ onNewNote }) => {
   return (
     <header className="h-16 border-b border-gray-100 flex items-center justify-between px-8 bg-white">
       <h2 className="text-2xl font-bold text-gray-800">Projects</h2>
@@ -30,7 +29,7 @@ export const TopBar: React.FC = () => {
         </div>
 
         <button
-          onClick={createNewNote}
+          onClick={onNewNote}
           className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm shadow-blue-200"
         >
           <Plus size={18} />

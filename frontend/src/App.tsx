@@ -16,6 +16,14 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 function App() {
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
+  const [refreshNotes, setRefreshNotes] = useState(0);
+
+  const handleAction = () => {
+    setSelectedNote(null);
+    setIsCreating(false);
+    setRefreshNotes((prev) => prev + 1);
+  };
 
   return (
     <BrowserRouter>
@@ -29,10 +37,25 @@ function App() {
               <div className="flex h-screen w-full bg-white overflow-hidden font-sans">
                 <Sidebar />
                 <div className="flex flex-col flex-1 h-full overflow-hidden">
-                  <TopBar />
+                  <TopBar
+                    onNewNote={() => {
+                      setIsCreating(true);
+                      setSelectedNote(null);
+                    }}
+                  />
                   <div className="flex flex-1 overflow-hidden">
-                    <Notelist onNoteSelect={setSelectedNote} />
-                    <NoteEditor note={selectedNote} />
+                    <Notelist
+                      onNoteSelect={(note) => {
+                        setSelectedNote(note);
+                        setIsCreating(false);
+                      }}
+                      refreshTrigger={refreshNotes}
+                    />
+                    <NoteEditor
+                      note={selectedNote}
+                      isCreating={isCreating}
+                      onAction={handleAction}
+                    />
                   </div>
                 </div>
               </div>

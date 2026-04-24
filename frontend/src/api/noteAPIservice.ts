@@ -21,6 +21,19 @@ export const getNoteById = async (noteId: number) => {
   }
 };
 
+export const updateNote = async (
+  noteId: number,
+  noteData: NoteCreateRequest,
+) => {
+  try {
+    const response = await axiosInstance.put(`/api/notes/${noteId}`, noteData);
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating note with ID ${noteId}:`, error);
+    throw error;
+  }
+};
+
 export const createNote = async (noteToCreate: NoteCreateRequest) => {
   try {
     const response = await axiosInstance.post("/api/notes", noteToCreate);

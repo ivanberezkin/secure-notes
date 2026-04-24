@@ -10,5 +10,5 @@ export interface Note {
 export interface NoteCreateRequest {
   title: string;
   content: string;
-  tags: string[];
+  favorite: boolean;
 }
