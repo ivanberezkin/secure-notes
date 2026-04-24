@@ -23,11 +23,16 @@ const Login = () => {
     setError(null);
     try {
       await loginUser(username, password);
+    } catch {
+      setError("Invalid username or password");
+      return;
+    }
+    try {
       const currentUser = await getCurrentUser();
       login(currentUser.username, currentUser.role);
       navigate("/");
     } catch {
-      setError("Invalid username or password");
+      setError("Failed to fetch user data. Please try again.");
     }
   };
   return (

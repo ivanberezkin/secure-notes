@@ -25,10 +25,11 @@ const Sidebar: React.FC = () => {
   const handleLogout = async () => {
     try {
       await logoutUser();
-      logout();
-      navigate("/login");
     } catch (error) {
       console.error("Error during logout:", error);
+    } finally {
+      logout();
+      navigate("/login");
     }
   };
 

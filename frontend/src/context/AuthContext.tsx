@@ -4,6 +4,7 @@ import axios from "axios";
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  isAuthLoading: boolean;
   username: string | null;
   role: string | null;
   login: (username: string, role: string) => void;
@@ -16,6 +17,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -30,10 +32,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setIsAuthenticated(true);
         setUsername(response.data.username);
         setRole(response.data.role);
-      } catch {
-        setIsAuthenticated(false);
-        setUsername(null);
-        setRole(null);
+      } catch (error) {
+        if (
+          axios.isAxiosError(error) &&
+          (error.response?.status === 401 || error.response?.status === 403)
+        ) {
+          setIsAuthenticated(false);
+          setUsername(null);
+          setRole(null);
+        } else {
+          console.error("Error checking authentication:", error);
+        }
+      } finally {
+        setIsAuthLoading(false);
       }
     };
     checkAuth();
@@ -53,7 +64,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, username, role, login, logout }}
+      value={{ isAuthenticated, isAuthLoading, username, role, login, logout }}
     >
       {children}
     </AuthContext.Provider>
