@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<UserResponseDto> getCurrentUser() {
+    public UserResponseDto getCurrentUser() {
         String username = SecurityContextHolder
                 .getContext()
                 .getAuthentication()
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
         UserEntity currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("NoteService: User not found " + username));
 
-        return ResponseEntity.ok(convertToDto(currentUser));
+        return convertToDto(currentUser);
     }
 
     private UserEntity convertToEntity(UserRequestDto dto) {

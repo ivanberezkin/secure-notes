@@ -1,5 +1,6 @@
 package com.example.secure_notes.Controller;
 
+import com.example.secure_notes.DTO.user.UserRequestDto;
 import com.example.secure_notes.DTO.user.UserResponseDto;
 import com.example.secure_notes.Model.UserEntity;
 import com.example.secure_notes.Repositories.UserRepository;
@@ -23,6 +24,7 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<UserResponseDto> getCurrentUser(){
-        return userService.getCurrentUser();
+        UserResponseDto currentUser = userService.getCurrentUser();
+        return ResponseEntity.ok(currentUser);
     }
 }
