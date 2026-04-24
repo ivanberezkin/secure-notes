@@ -2,7 +2,6 @@ export interface Note {
   id: number;
   title: string;
   content: string;
-  tags: string[];
   createdAt: string;
   updatedAt: string;
   favorite: boolean;
@@ -11,5 +10,5 @@ export interface Note {
 export interface NoteCreateRequest {
   title: string;
   content: string;
-  tags: string[];
+  favorite: boolean;
 }

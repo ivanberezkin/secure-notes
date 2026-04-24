@@ -8,10 +8,12 @@ import com.example.secure_notes.Repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
@@ -38,7 +40,7 @@ public class UserServiceImpl implements UserService {
     public String verify(UserRequestDto user, HttpServletRequest request) {
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-        if(authentication.isAuthenticated()){
+        if (authentication.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             HttpSession session = request.getSession(true);
             session.setAttribute(
@@ -49,6 +51,18 @@ public class UserServiceImpl implements UserService {
         return "Login Successful";
     }
 
+    @Override
+    public UserResponseDto getCurrentUser() {
+        String username = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        UserEntity currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("UserService: User not found " + username));
+
+        return convertToDto(currentUser);
+    }
 
     private UserEntity convertToEntity(UserRequestDto dto) {
         return UserEntity.builder()
@@ -60,6 +74,7 @@ public class UserServiceImpl implements UserService {
     private UserResponseDto convertToDto(UserEntity user) {
         return UserResponseDto.builder()
                 .username(user.getUsername())
+                .role(user.getRole().name())
                 .build();
     }
 
