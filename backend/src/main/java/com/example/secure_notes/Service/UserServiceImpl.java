@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
                 .getName();
 
         UserEntity currentUser = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("NoteService: User not found " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("UserService: User not found " + username));
 
         return convertToDto(currentUser);
     }
