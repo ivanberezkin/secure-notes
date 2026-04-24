@@ -1,7 +1,12 @@
 import React from "react";
-import { Search, Bell, Settings, Plus } from "lucide-react";
+import { Search, Settings, Plus } from "lucide-react";
 
 export const TopBar: React.FC = () => {
+  const createNewNote = () => {
+    // Placeholder for creating a new note
+    alert("Create new note functionality to be implemented!");
+  };
+
   return (
     <header className="h-16 border-b border-gray-100 flex items-center justify-between px-8 bg-white">
       <h2 className="text-2xl font-bold text-gray-800">Projects</h2>
@@ -24,19 +29,15 @@ export const TopBar: React.FC = () => {
           />
         </div>
 
-        <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm shadow-blue-200">
+        <button
+          onClick={createNewNote}
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm shadow-blue-200"
+        >
           <Plus size={18} />
           New Note
         </button>
 
         <div className="flex items-center gap-3 text-gray-400 border-l pl-6 border-gray-200">
-          <button
-            type="button"
-            aria-label="Notifications"
-            className="p-1 rounded hover:text-gray-600 hover:bg-gray-100"
-          >
-            <Bell size={20} />
-          </button>
           <button
             type="button"
             aria-label="Settings"

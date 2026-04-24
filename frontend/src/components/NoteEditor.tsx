@@ -9,8 +9,13 @@ import {
   Link,
   Trash2,
 } from "lucide-react";
+import type { Note } from "../types/note";
 
-const NoteEditor: React.FC = () => {
+interface NoteEditorProps {
+  note: Note | null;
+}
+
+const NoteEditor: React.FC<NoteEditorProps> = ({ note }) => {
   return (
     <div className="flex-1 flex flex-col h-full bg-white">
       {/* Editor Area */}
@@ -18,19 +23,23 @@ const NoteEditor: React.FC = () => {
         {/* Note Metadata */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Team Meeting Notes - Q4 Planning
+            {note?.title || "Untitled Note"}
           </h1>
           <div className="flex items-center gap-4 text-sm text-gray-500">
-            <span>Aug 15, 2023 | 2:10 PM</span>
-            <div className="flex items-center gap-2">
-              <span className="font-medium">Tags:</span>
-              <span className="bg-gray-100 px-2 py-0.5 rounded text-gray-600">
-                #Work
-              </span>
-              <span className="bg-gray-100 px-2 py-0.5 rounded text-gray-600">
-                #Meeting
-              </span>
-            </div>
+            <span>
+              Created{" "}
+              {note?.createdAt
+                ? new Date(note.createdAt).toLocaleString()
+                : "Unknown"}
+            </span>
+          </div>
+          <div className="flex items-center gap-4 text-sm text-gray-500">
+            <span>
+              Updated{" "}
+              {note?.updatedAt
+                ? new Date(note.updatedAt).toLocaleString()
+                : "Unknown"}
+            </span>
           </div>
         </div>
 
@@ -106,30 +115,6 @@ const NoteEditor: React.FC = () => {
             <li>Prioritize learning attributes</li>
             <li>Identify new goals and automation needs</li>
           </ul>
-
-          <h3 className="text-xl font-bold text-gray-800 mb-4">
-            Identify new goals
-          </h3>
-          <div className="space-y-3">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="text-gray-700">Discuss budget updates</span>
-            </label>
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked
-                readOnly
-                className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="text-gray-700 line-through decoration-gray-400">
-                Identify new goals
-              </span>
-            </label>
-          </div>
         </article>
       </main>
     </div>

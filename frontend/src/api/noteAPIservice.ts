@@ -1,12 +1,9 @@
-import axios from "axios";
 import type { NoteCreateRequest } from "../types/note";
 import axiosInstance from "./axiosConfig";
 
-const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/api/notes`;
-
-export const getNotes = async () => {
+export const getUserNotes = async () => {
   try {
-    const response = await axiosInstance.get(API_BASE_URL);
+    const response = await axiosInstance.get("/api/notes/my");
     return response.data;
   } catch (error) {
     console.error("Error fetching notes:", error);
@@ -16,7 +13,7 @@ export const getNotes = async () => {
 
 export const getNoteById = async (noteId: number) => {
   try {
-    const response = await axiosInstance.get(`${API_BASE_URL}/${noteId}`);
+    const response = await axiosInstance.get(`/api/notes/${noteId}`);
     return response.data;
   } catch (error) {
     console.error(`Error fetching note with ID ${noteId}:`, error);
@@ -26,7 +23,7 @@ export const getNoteById = async (noteId: number) => {
 
 export const createNote = async (noteToCreate: NoteCreateRequest) => {
   try {
-    const response = await axiosInstance.post(API_BASE_URL, noteToCreate);
+    const response = await axiosInstance.post("/api/notes", noteToCreate);
     return response.data;
   } catch (error) {
     console.error("Error creating note:", error);
@@ -36,7 +33,7 @@ export const createNote = async (noteToCreate: NoteCreateRequest) => {
 
 export const deleteNote = async (noteId: number) => {
   try {
-    const response = await axiosInstance.delete(`${API_BASE_URL}/${noteId}`);
+    const response = await axiosInstance.delete(`/api/notes/${noteId}`);
     return response.data;
   } catch (error) {
     console.error(`Error deleting note with ID ${noteId}:`, error);

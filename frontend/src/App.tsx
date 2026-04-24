@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./hooks/useAuth";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import type { Note } from "./types/note";
+import { useState } from "react";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -13,6 +15,8 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 function App() {
+  const [selectedNote, setSelectedNote] = useState<Note | null>(null);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -27,8 +31,8 @@ function App() {
                 <div className="flex flex-col flex-1 h-full overflow-hidden">
                   <TopBar />
                   <div className="flex flex-1 overflow-hidden">
-                    <Notelist />
-                    <NoteEditor />
+                    <Notelist onNoteSelect={setSelectedNote} />
+                    <NoteEditor note={selectedNote} />
                   </div>
                 </div>
               </div>

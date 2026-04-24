@@ -1,43 +1,28 @@
-import React, { useState } from "react";
-import { CheckCircle2, ListFilter } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { ListFilter } from "lucide-react";
+import type { Note } from "../types/note";
+import { getUserNotes } from "../api/noteAPIservice";
 
-interface NotePreview {
-  id: string;
-  title: string;
-  date: string;
-  tags: string[];
-  excerpt: string;
+interface Props {
+  onNoteSelect: (note: Note) => void;
 }
 
-const notesData: NotePreview[] = [
-  {
-    id: "1",
-    title: "Team Meeting Notes - Q4 Planning",
-    date: "Aug 15",
-    tags: ["Work"],
-    excerpt:
-      "Team Meeting Notes · sit amet, consectetur adipiscing elits sed up meeting a and for meeting our soritet...",
-  },
-  {
-    id: "2",
-    title: "Project Roadmap Q4",
-    date: "Aug 14",
-    tags: ["Design", "Meeting"],
-    excerpt:
-      "Project roadmap Q4 excerpts hight excerpt tromt meesiups teams, and plameed to ahove valuets and proma...",
-  },
-  {
-    id: "3",
-    title: "Vacation Itinerary",
-    date: "Aug 12",
-    tags: ["Personal", "Travel"],
-    excerpt:
-      "Vacation Itinerary dolor sit amet, consectetur adipiscing elit. Find the itinerary will echasey and line to a lia...",
-  },
-];
+const Notelist: React.FC<Props> = ({ onNoteSelect }) => {
+  const [selectedNote, setSelectedNote] = useState<number | null>(null);
+  const [notes, setNotes] = useState<Note[]>([]);
 
-const NotesList: React.FC = () => {
-  const [selectedId, setSelectedId] = useState("1");
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const notes = await getUserNotes();
+        setNotes(notes);
+      } catch {
+        console.error("Failed to fetch notes");
+      }
+    };
+
+    fetchNotes();
+  }, []);
 
   return (
     <div className="w-120 h-full border-r border-gray-200 bg-gray-50 flex flex-col">
@@ -51,44 +36,38 @@ const NotesList: React.FC = () => {
 
       {/* List Container */}
       <div className="flex-1 overflow-y-auto p-3 space-y-3">
-        {notesData.map((note) => (
+        {notes.map((note) => (
           <div
             key={note.id}
-            onClick={() => setSelectedId(note.id)}
+            onClick={() => {
+              setSelectedNote(note.id);
+              onNoteSelect(note);
+            }}
             className={`p-4 rounded-xl border cursor-pointer transition-all relative ${
-              selectedId === note.id
+              selectedNote === note.id
                 ? "bg-white border-blue-500 shadow-md ring-1 ring-blue-500"
                 : "bg-white border-gray-200 hover:border-gray-300 shadow-sm"
             }`}
           >
-            {/* Selection indicator icon */}
-            {selectedId === note.id && (
-              <CheckCircle2
-                size={16}
-                className="absolute top-4 right-4 text-blue-500"
-              />
-            )}
-
-            <h3 className="font-bold text-gray-900 text-sm mb-1 pr-6 truncate">
-              {note.title}
-            </h3>
-
-            <div className="flex gap-2 items-center mb-2">
-              <span className="text-[10px] text-gray-400 font-medium uppercase">
-                {note.date}
-              </span>
-              {note.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="text-[10px] text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded"
-                >
-                  #{tag}
-                </span>
-              ))}
+            {/* Title + Star */}
+            <div className="flex items-center justify-between mb-1">
+              <h3 className="font-bold text-gray-900 text-sm truncate pr-2">
+                {note.title}
+              </h3>
             </div>
 
+            {/* Created at */}
+            <p className="text-[10px] text-gray-400 font-medium mb-2">
+              {new Date(note.createdAt).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </p>
+
+            {/* Content preview */}
             <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">
-              {note.excerpt}
+              {note.content || "No content..."}
             </p>
           </div>
         ))}
@@ -97,4 +76,4 @@ const NotesList: React.FC = () => {
   );
 };
 
-export default NotesList;
+export default Notelist;
