@@ -1,9 +1,14 @@
 package com.example.secure_notes.Controller;
 
+import com.example.secure_notes.DTO.user.UserResponseDto;
 import com.example.secure_notes.Model.UserEntity;
 import com.example.secure_notes.Repositories.UserRepository;
+import com.example.secure_notes.Service.NoteService;
+import com.example.secure_notes.Service.NoteServiceImpl;
 import com.example.secure_notes.Service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,12 +20,9 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
 
-    //TODO just for testing rework later!!
-    @GetMapping
-    public List<UserEntity> getAllUsersTest() {
-        return userRepository.findAll();
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDto> getCurrentUser(){
+        return userService.getCurrentUser();
     }
-
 }
