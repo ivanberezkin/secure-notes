@@ -1,20 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
-import { getCurrentUser } from "../api/userAPIservice";
+import { getCurrentUser, loginUser } from "../api/userAPIservice";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const { login } = useAuth();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     try {
-      await login(username, password);
+      await loginUser(username, password);
       const currentUser = await getCurrentUser();
       login(currentUser.username, currentUser.role);
       navigate("/");
