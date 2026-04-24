@@ -1,15 +1,26 @@
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
+import { getCurrentUser } from "../api/userAPIservice";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    try {
+      await login(username, password);
+      const currentUser = await getCurrentUser();
+      login(currentUser.username, currentUser.role);
+      navigate("/");
+    } catch {
+      setError("Invalid username or password");
+    }
   };
   return (
     <div className="flex items-center justify-center h-screen bg-gray-50">
