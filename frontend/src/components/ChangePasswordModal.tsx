@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import { changePassword } from "../api/userAPIservice";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   onClose: () => void;
@@ -12,6 +14,8 @@ const ChangePasswordModal: React.FC<Props> = ({ onClose }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -25,7 +29,10 @@ const ChangePasswordModal: React.FC<Props> = ({ onClose }) => {
     try {
       await changePassword(currentPassword, newPassword);
       setSuccess(true);
-      setTimeout(() => onClose(), 2000);
+      setTimeout(() => {
+        logout();
+        navigate("/login");
+      }, 2000);
     } catch {
       setError("Failed to change password");
     }
