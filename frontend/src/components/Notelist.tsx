@@ -65,7 +65,6 @@ const Notelist: React.FC<Props> = ({
                 {note.title}
               </h3>
             </div>
-
             {/* Created at */}
             <p className="text-[10px] text-gray-400 font-medium mb-2">
               {new Date(note.createdAt).toLocaleDateString("en-US", {
@@ -74,11 +73,12 @@ const Notelist: React.FC<Props> = ({
                 year: "numeric",
               })}
             </p>
-
             {/* User */}
-            <p className="text-[10px] text-gray-400 font-medium mb-2">
-              {note.username}
-            </p>
+            {isAdminMode && (
+              <p className="text-[10px] text-gray-400 font-medium mb-2">
+                {note.username}
+              </p>
+            )}
             {/* Content preview */}
             <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">
               {note.content || "No content..."}
