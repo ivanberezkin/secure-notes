@@ -2,20 +2,28 @@ import React, { useEffect, useState } from "react";
 import { ListFilter } from "lucide-react";
 import type { Note } from "../types/note";
 import { getUserNotes } from "../api/noteAPIservice";
+import { getAllNotesAdmin } from "../api/adminNoteApiService";
 
 interface Props {
   onNoteSelect: (note: Note) => void;
   refreshTrigger: number; // Optional prop to trigger refresh when notes are updated
+  isAdminMode: boolean;
 }
 
-const Notelist: React.FC<Props> = ({ onNoteSelect, refreshTrigger }) => {
+const Notelist: React.FC<Props> = ({
+  onNoteSelect,
+  refreshTrigger,
+  isAdminMode,
+}) => {
   const [selectedNote, setSelectedNote] = useState<number | null>(null);
   const [notes, setNotes] = useState<Note[]>([]);
 
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const notes = await getUserNotes();
+        const notes = isAdminMode
+          ? await getAllNotesAdmin()
+          : await getUserNotes();
         setSelectedNote(null);
         setNotes(notes);
       } catch {
@@ -24,7 +32,7 @@ const Notelist: React.FC<Props> = ({ onNoteSelect, refreshTrigger }) => {
     };
 
     fetchNotes();
-  }, [refreshTrigger]);
+  }, [refreshTrigger, isAdminMode]);
 
   return (
     <div className="w-120 h-full border-r border-gray-200 bg-gray-50 flex flex-col">
@@ -57,7 +65,6 @@ const Notelist: React.FC<Props> = ({ onNoteSelect, refreshTrigger }) => {
                 {note.title}
               </h3>
             </div>
-
             {/* Created at */}
             <p className="text-[10px] text-gray-400 font-medium mb-2">
               {new Date(note.createdAt).toLocaleDateString("en-US", {
@@ -66,7 +73,12 @@ const Notelist: React.FC<Props> = ({ onNoteSelect, refreshTrigger }) => {
                 year: "numeric",
               })}
             </p>
-
+            {/* User */}
+            {isAdminMode && (
+              <p className="text-[10px] text-gray-400 font-medium mb-2">
+                {note.username}
+              </p>
+            )}
             {/* Content preview */}
             <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">
               {note.content || "No content..."}

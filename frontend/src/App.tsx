@@ -18,6 +18,7 @@ function App() {
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [refreshNotes, setRefreshNotes] = useState(0);
+  const [isAdminMode, setIsAdminMode] = useState(false);
 
   const handleAction = () => {
     setSelectedNote(null);
@@ -35,11 +36,23 @@ function App() {
           element={
             <ProtectedRoute>
               <div className="flex h-screen w-full bg-white overflow-hidden font-sans">
-                <Sidebar />
+                <Sidebar
+                  onLogout={() => {
+                    setIsAdminMode(false);
+                    setSelectedNote(null);
+                    setIsCreating(false);
+                  }}
+                />
                 <div className="flex flex-col flex-1 h-full overflow-hidden">
                   <TopBar
                     onNewNote={() => {
                       setIsCreating(true);
+                      setSelectedNote(null);
+                    }}
+                    isAdminMode={isAdminMode}
+                    onToggleAdminMode={() => {
+                      setIsAdminMode((prev) => !prev);
+                      setIsCreating(false);
                       setSelectedNote(null);
                     }}
                   />
@@ -50,6 +63,7 @@ function App() {
                         setIsCreating(false);
                       }}
                       refreshTrigger={refreshNotes}
+                      isAdminMode={isAdminMode}
                     />
                     <NoteEditor
                       note={selectedNote}

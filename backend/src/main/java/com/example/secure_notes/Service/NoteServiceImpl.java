@@ -7,6 +7,7 @@ import com.example.secure_notes.Model.NoteEntity;
 import com.example.secure_notes.Model.UserEntity;
 import com.example.secure_notes.Repositories.NoteRepository;
 import com.example.secure_notes.Repositories.UserRepository;
+import com.example.secure_notes.Utils.Roles;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,11 +47,15 @@ public class NoteServiceImpl implements NoteService{
 
     @Override
     public NoteEntity getNoteById(Long id) {
-        NoteEntity detailedNote = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("Noteservice: Note Id not found: " + id));
+        NoteEntity detailedNote = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("Note Id not found: " + id));
 
         UserEntity authenticatedUser = getContextUser();
+
+        if(authenticatedUser.getRole() == Roles.ADMIN){
+            return detailedNote;
+        }
         if(!detailedNote.getUser().getId().equals(authenticatedUser.getId())){
-            throw new NoteNotFoundException("Noteservice: Note not found: " + id);
+            throw new NoteNotFoundException("Note not found: " + id);
         }
 
         return detailedNote;

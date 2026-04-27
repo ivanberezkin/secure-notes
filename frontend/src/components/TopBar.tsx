@@ -1,14 +1,22 @@
 import React, { useState } from "react";
-import { Search, Settings, Plus } from "lucide-react";
+import { Search, Settings, Plus, Shield } from "lucide-react";
 import ChangePasswordModal from "./ChangePasswordModal";
+import { useAuth } from "../hooks/useAuth";
 
 interface TopBarProps {
   onNewNote: () => void;
+  isAdminMode: boolean;
+  onToggleAdminMode: () => void;
 }
 
-export const TopBar: React.FC<TopBarProps> = ({ onNewNote }) => {
+export const TopBar: React.FC<TopBarProps> = ({
+  onNewNote,
+  isAdminMode,
+  onToggleAdminMode,
+}) => {
   const [showSettings, setShowSettings] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const { role } = useAuth();
 
   return (
     <header className="h-16 border-b border-gray-100 flex items-center justify-between px-8 bg-white">
@@ -69,6 +77,21 @@ export const TopBar: React.FC<TopBarProps> = ({ onNewNote }) => {
         {/* Modal */}
         {showChangePassword && (
           <ChangePasswordModal onClose={() => setShowChangePassword(false)} />
+        )}
+      </div>
+      <div className="flex items-center gap-6">
+        {role === "ADMIN" && (
+          <button
+            onClick={onToggleAdminMode}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors text-white ${
+              isAdminMode
+                ? "bg-green-600 hover:bg-green-700" // User Panel
+                : "bg-purple-600 hover:bg-purple-700" // Admin Panel
+            }`}
+          >
+            <Shield size={18} />
+            {isAdminMode ? "User Panel" : "Admin Panel"}
+          </button>
         )}
       </div>
     </header>
