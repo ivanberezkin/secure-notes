@@ -18,9 +18,6 @@ export const TopBar: React.FC<TopBarProps> = ({
   const [showChangePassword, setShowChangePassword] = useState(false);
   const { role } = useAuth();
 
-  console.log("role", role);
-  console.log("isAdminMode", isAdminMode);
-
   return (
     <header className="h-16 border-b border-gray-100 flex items-center justify-between px-8 bg-white">
       <h2 className="text-2xl font-bold text-gray-800">Projects</h2>

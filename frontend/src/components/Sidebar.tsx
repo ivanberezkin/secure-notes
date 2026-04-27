@@ -4,6 +4,10 @@ import { logoutUser } from "../api/userAPIservice";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router";
 
+interface Props {
+  onLogout: () => void;
+}
+
 interface NavItem {
   id: string;
   label: string;
@@ -11,7 +15,7 @@ interface NavItem {
   count?: number;
 }
 
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC<Props> = ({ onLogout }) => {
   const [activeTab, setActiveTab] = useState("all-notes");
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -29,6 +33,7 @@ const Sidebar: React.FC = () => {
       console.error("Error during logout:", error);
     } finally {
       logout();
+      onLogout();
       navigate("/login");
     }
   };

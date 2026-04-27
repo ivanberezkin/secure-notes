@@ -36,7 +36,13 @@ function App() {
           element={
             <ProtectedRoute>
               <div className="flex h-screen w-full bg-white overflow-hidden font-sans">
-                <Sidebar />
+                <Sidebar
+                  onLogout={() => {
+                    setIsAdminMode(false);
+                    setSelectedNote(null);
+                    setIsCreating(false);
+                  }}
+                />
                 <div className="flex flex-col flex-1 h-full overflow-hidden">
                   <TopBar
                     onNewNote={() => {
