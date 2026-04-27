@@ -9,6 +9,7 @@ import com.example.secure_notes.Model.UserEntity;
 import com.example.secure_notes.Repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager authenticationManager;
     private final BCryptPasswordEncoder passwordEncoder;
 
+    @Transactional
     @Override
     public UserResponseDto createNewUser(UserRequestDto newUserDto) {
         if (userRepository.existsByUsername(newUserDto.getUsername())) {
@@ -58,18 +60,19 @@ public class UserServiceImpl implements UserService {
         return convertToDto(userEntityCurrentUser());
     }
 
+    @Transactional
     @Override
     public UserResponseDto changeUserPassword(UserPasswordRequestDto newPasswordDto) {
         UserEntity userEntity = userEntityCurrentUser();
         if (!passwordEncoder.matches(
                 newPasswordDto.getCurrentPassword(),
                 userEntity.getPassword())) {
-            throw new PasswordUnavailableException("UserService: Current Password doesn't match.");
+            throw new PasswordUnavailableException("Current Password doesn't match.");
         }
         if (passwordEncoder.matches(
                 newPasswordDto.getNewPassword(),
                 userEntity.getPassword())) {
-            throw new PasswordUnavailableException("UserService: New password must be different.");
+            throw new PasswordUnavailableException("New password must be different.");
         }
 
         userEntity.setPassword(passwordEncoder.encode(newPasswordDto.getNewPassword()));
@@ -83,7 +86,7 @@ public class UserServiceImpl implements UserService {
                 .getName();
 
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("UserService: User not found " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
     }
 
     private UserEntity convertToEntity(UserRequestDto dto) {
