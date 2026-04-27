@@ -2,12 +2,12 @@
 Focus on security.**
 
 ### About Project
-Application is using Spring Boot as backend with an RestAPI as endpoints. For security i went with Spring Security.
-Backend is following MVC pattern and is connected PostgreSQL database, for database fetching it's using Spring JPA / Hibernate.
-Together with Spring Security, BCrypt is used for password encoding to make it more secure, also implemented CSRF protection and Session-cookie authentication (JSESSIONID).
-Two roles of user (ADMIN/USER) which gives more permissions to Admin. 
-For Frontend the project uses React 19 together with Tailwind CSS to construct the site. 
-Currently runs locally, so personal "application.properties" file is needed for database configuration. 
+Application is using Spring Boot as backend with an RestAPI as endpoints. For security i went with Spring Security.<br>
+Backend is following MVC pattern and is connected PostgreSQL database, for database fetching it's using Spring JPA / Hibernate.<br>
+Together with Spring Security, BCrypt is used for password encoding to make it more secure, also implemented CSRF protection and Session-cookie authentication (JSESSIONID).<br>
+Two roles of user (ADMIN/USER) which gives more permissions to Admin. <br>
+For Frontend the project uses React 19 together with Tailwind CSS to construct the site. <br>
+Currently runs locally, so personal "application.properties" file is needed for database configuration. <br>
 
 ### 🛠 Tech Stack
 
