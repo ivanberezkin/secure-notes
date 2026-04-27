@@ -18,6 +18,7 @@ function App() {
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [refreshNotes, setRefreshNotes] = useState(0);
+  const [isAdminMode, setIsAdminMode] = useState(false);
 
   const handleAction = () => {
     setSelectedNote(null);
@@ -42,6 +43,8 @@ function App() {
                       setIsCreating(true);
                       setSelectedNote(null);
                     }}
+                    isAdminMode={isAdminMode}
+                    onToggleAdminMode={() => setIsAdminMode((prev) => !prev)}
                   />
                   <div className="flex flex-1 overflow-hidden">
                     <Notelist
@@ -50,6 +53,7 @@ function App() {
                         setIsCreating(false);
                       }}
                       refreshTrigger={refreshNotes}
+                      isAdminMode={isAdminMode}
                     />
                     <NoteEditor
                       note={selectedNote}

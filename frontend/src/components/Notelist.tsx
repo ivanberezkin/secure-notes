@@ -2,20 +2,28 @@ import React, { useEffect, useState } from "react";
 import { ListFilter } from "lucide-react";
 import type { Note } from "../types/note";
 import { getUserNotes } from "../api/noteAPIservice";
+import { getAllNotesAdmin } from "../api/adminNoteApiService";
 
 interface Props {
   onNoteSelect: (note: Note) => void;
   refreshTrigger: number; // Optional prop to trigger refresh when notes are updated
+  isAdminMode: boolean;
 }
 
-const Notelist: React.FC<Props> = ({ onNoteSelect, refreshTrigger }) => {
+const Notelist: React.FC<Props> = ({
+  onNoteSelect,
+  refreshTrigger,
+  isAdminMode,
+}) => {
   const [selectedNote, setSelectedNote] = useState<number | null>(null);
   const [notes, setNotes] = useState<Note[]>([]);
 
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const notes = await getUserNotes();
+        const notes = isAdminMode
+          ? await getAllNotesAdmin()
+          : await getUserNotes();
         setSelectedNote(null);
         setNotes(notes);
       } catch {
@@ -24,7 +32,7 @@ const Notelist: React.FC<Props> = ({ onNoteSelect, refreshTrigger }) => {
     };
 
     fetchNotes();
-  }, [refreshTrigger]);
+  }, [refreshTrigger, isAdminMode]);
 
   return (
     <div className="w-120 h-full border-r border-gray-200 bg-gray-50 flex flex-col">
