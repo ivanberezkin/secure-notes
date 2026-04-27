@@ -75,6 +75,10 @@ const Notelist: React.FC<Props> = ({
               })}
             </p>
 
+            {/* User */}
+            <p className="text-[10px] text-gray-400 font-medium mb-2">
+              {note.username}
+            </p>
             {/* Content preview */}
             <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">
               {note.content || "No content..."}
