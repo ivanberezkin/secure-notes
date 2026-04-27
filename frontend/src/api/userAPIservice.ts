@@ -23,6 +23,21 @@ export const loginUser = async (username: string, password: string) => {
   }
 };
 
+export const changePassword = async (
+  currentPassword: string,
+  newPassword: string,
+) => {
+  try {
+    await axiosInstance.put("/api/users/changepass", {
+      currentPassword,
+      newPassword,
+    });
+  } catch (error) {
+    console.error("Error changing password.");
+    throw error;
+  }
+};
+
 export const logoutUser = async () => {
   try {
     const response = await axiosInstance.post("/logout");

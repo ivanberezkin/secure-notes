@@ -34,6 +34,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(PasswordUnavailableException.class)
+    public ResponseEntity<Map<String, Object>> handlePasswordUnavailable(PasswordUnavailableException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", ex.getMessage());
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(NoteNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handeNoteNotFound(NoteNotFoundException ex) {
         Map<String, Object> body = new HashMap<>();
