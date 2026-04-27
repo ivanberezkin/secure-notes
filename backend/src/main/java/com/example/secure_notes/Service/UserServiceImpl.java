@@ -1,7 +1,9 @@
 package com.example.secure_notes.Service;
 
+import com.example.secure_notes.DTO.user.UserPasswordRequestDto;
 import com.example.secure_notes.DTO.user.UserRequestDto;
 import com.example.secure_notes.DTO.user.UserResponseDto;
+import com.example.secure_notes.Exceptions.PasswordUnavailableException;
 import com.example.secure_notes.Exceptions.UserAlreadyExistsException;
 import com.example.secure_notes.Model.UserEntity;
 import com.example.secure_notes.Repositories.UserRepository;
@@ -53,15 +55,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto getCurrentUser() {
+        return convertToDto(userEntityCurrentUser());
+    }
+
+    @Override
+    public UserResponseDto changeUserPassword(UserPasswordRequestDto newPasswordDto) {
+        UserEntity userEntity = userEntityCurrentUser();
+        if (!passwordEncoder.matches(
+                newPasswordDto.getCurrentPassword(),
+                userEntity.getPassword())) {
+            throw new PasswordUnavailableException("UserService: Current Password doesn't match.");
+        }
+        if (passwordEncoder.matches(
+                newPasswordDto.getNewPassword(),
+                userEntity.getPassword())) {
+            throw new PasswordUnavailableException("UserService: New password must be different.");
+        }
+
+        userEntity.setPassword(passwordEncoder.encode(newPasswordDto.getNewPassword()));
+        return convertToDto(userRepository.save(userEntity));
+    }
+
+    private UserEntity userEntityCurrentUser() {
         String username = SecurityContextHolder
                 .getContext()
                 .getAuthentication()
                 .getName();
 
-        UserEntity currentUser = userRepository.findByUsername(username)
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("UserService: User not found " + username));
-
-        return convertToDto(currentUser);
     }
 
     private UserEntity convertToEntity(UserRequestDto dto) {
