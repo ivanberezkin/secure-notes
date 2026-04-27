@@ -39,9 +39,9 @@ public class GlobalExceptionHandler {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("message", ex.getMessage());
-        body.put("status", HttpStatus.FORBIDDEN.value());
+        body.put("status", HttpStatus.BAD_REQUEST.value());
 
-        return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(NoteNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handeNoteNotFound(NoteNotFoundException ex) {

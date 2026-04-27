@@ -1,21 +1,15 @@
 package com.example.secure_notes.Controller;
 
 import com.example.secure_notes.DTO.user.UserPasswordRequestDto;
-import com.example.secure_notes.DTO.user.UserRequestDto;
 import com.example.secure_notes.DTO.user.UserResponseDto;
-import com.example.secure_notes.Model.UserEntity;
-import com.example.secure_notes.Repositories.UserRepository;
-import com.example.secure_notes.Service.NoteService;
-import com.example.secure_notes.Service.NoteServiceImpl;
 import com.example.secure_notes.Service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -33,9 +27,17 @@ public class UserController {
 
     @PutMapping("/changepass")
     public ResponseEntity<UserResponseDto> changeUserPassword(
-            @Valid @RequestBody UserPasswordRequestDto newPassword
+            @Valid @RequestBody UserPasswordRequestDto newPassword,
+            HttpServletRequest request
             ){
         UserResponseDto user = userService.changeUserPassword(newPassword);
+
+        HttpSession session = request.getSession(false);
+        if(session != null){
+            session.invalidate();
+        }
+        SecurityContextHolder.clearContext();
+
         return ResponseEntity.ok(user);
     }
 
