@@ -50,7 +50,11 @@ function App() {
                       setSelectedNote(null);
                     }}
                     isAdminMode={isAdminMode}
-                    onToggleAdminMode={() => setIsAdminMode((prev) => !prev)}
+                    onToggleAdminMode={() => {
+                      setIsAdminMode((prev) => !prev);
+                      setIsCreating(false);
+                      setSelectedNote(null);
+                    }}
                   />
                   <div className="flex flex-1 overflow-hidden">
                     <Notelist
